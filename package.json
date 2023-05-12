@@ -1,0 +1,22 @@
+{
+  "name": "GameRatings",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Mafrans/GameRatings.git",
+  "author": "Mafrans <malte.kluft@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "npm-run-all": "^4.1.5"
+  },
+  "scripts": {
+    "install:frontend": "yarn --cwd=frontend install",
+    "install:backend": "yarn --cwd=backend install",
+    "dev:frontend": "yarn --cwd=frontend dev",
+    "dev:backend": "yarn --cwd=backend dev",
+    "build:frontend": "yarn --cwd=frontend build",
+    "build:backend": "yarn --cwd=backend build",
+    "postinstall": "run-p install:*",
+    "dev": "run-p dev:*",
+    "build": "run-p build:*"
+  }
+}
