@@ -33,7 +33,7 @@ Production files are available at
 
 ### Preview production files
 
-````sh
+```sh
 yarn preview
 ```
 
