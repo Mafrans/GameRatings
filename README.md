@@ -18,8 +18,8 @@ yarn dev
 ```
 
 Servers are available at  
-(backend) http://localhost:3000
-(frontend) http://localhost:5701
+`backend` http://localhost:3000  
+`frontend` http://localhost:5701
 
 ### Build production files
 
@@ -27,16 +27,17 @@ Servers are available at
 yarn build
 ```
 
-Production files are available at
-(backend) ./backend/dist
-(frontend) ./frontend/.svelte-kit/output
+Production files are available at  
+`backend` ./backend/dist  
+`frontend` ./frontend/.svelte-kit/output
 
 ### Preview production files
 
 ````sh
-yarn preview```
+yarn preview
+```
 
-Preview servers are available at
-(backend) http://localhost:3000
-(frontend) http://localhost:4173
+Preview servers are available at  
+`backend` http://localhost:3000  
+`frontend` http://localhost:4173
 ````
