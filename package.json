@@ -15,8 +15,11 @@
     "dev:backend": "yarn --cwd=backend dev",
     "build:frontend": "yarn --cwd=frontend build",
     "build:backend": "yarn --cwd=backend build",
+    "preview:frontend": "yarn --cwd=frontend preview",
+    "preview:backend": "yarn --cwd=backend start",
     "postinstall": "run-p install:*",
     "dev": "run-p dev:*",
-    "build": "run-p build:*"
+    "build": "run-s build:*",
+    "preview": "run-p preview:*"
   }
 }

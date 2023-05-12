@@ -1,4 +1,5 @@
-import { build } from "./build.mjs";
+import { context } from "./context.mjs";
 
-const ctx = await build();
-ctx.watch();
+// Rebuild once, then watch for future changes
+context.rebuild();
+context.watch();
