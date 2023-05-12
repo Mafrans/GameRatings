@@ -14,7 +14,7 @@
   // `$:` marks a statement or code block as reactive, it reevaluates when something it depends on changes
   // https://svelte.dev/docs#component-format-script-3-$-marks-a-statement-as-reactive
   $: {
-    // When `input.value` changes, query the API for the new text data, and replace it.
+    // When `name` changes, query the API for the new text data, and replace it.
     _fetchHelloWorld(name).then((newData) => data = newData);
   } 
 </script>
