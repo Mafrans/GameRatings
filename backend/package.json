@@ -2,7 +2,7 @@
   "scripts": {
     "build": "node ./build/build.mjs",
     "start": "NODE_ENV=production node ./dist/index.js",
-    "dev:start": "mkdir ./dist && onchange -k ./dist/**/* -- node ./dist/index.js",
+    "dev:start": "yarn build && node --watch ./dist/index.js",
     "dev:build": "node ./build/watch.mjs",
     "dev": "run-p dev:*"
   },
