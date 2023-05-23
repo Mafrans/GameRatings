@@ -1,8 +1,8 @@
 import { FastifyInstance, FastifyPluginAsync } from "fastify";
-import getHelloWorld from "./helloworld/getHelloWorld";
+import { getGamesRoute } from "./games/getGamesRoute";
 
 const router: FastifyPluginAsync = async (fastify: FastifyInstance) => {
-  fastify.get("/helloworld", getHelloWorld);
+  fastify.get("/games", getGamesRoute);
 };
 
 export default router;
