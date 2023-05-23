@@ -326,6 +326,11 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
+"@sinclair/typebox@^0.28.11":
+  version "0.28.11"
+  resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.28.11.tgz#f094caefc315e1a9b4e649056f661ddb20fcea97"
+  integrity sha512-8QPhkOowccAdXa/ra54pq+UVYvzbKjYMuojxCOTFq+yyEfcWZJSdlIVdivTRrIq7Mgjx1n4E37t8Js/RXwyvUg==
+
 "@tootallnate/once@1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"

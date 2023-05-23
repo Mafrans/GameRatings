@@ -37,9 +37,5 @@ export async function getGamesRoute(
       break;
   }
 
-  return games.map((game) => ({
-    title: game.title,
-    slug: game.slug,
-    rating: game.rating,
-  }));
+  return games;
 }
