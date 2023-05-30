@@ -25,10 +25,7 @@ export async function seedGames() {
   for (const game of games) {
     process.stdout.write(game.title);
     try {
-      await createGame({
-        "@title": game.title,
-        "@slug": game.slug,
-      });
+      createGame.run(game);
     } catch (err) {
       process.stdout.write(" ERROR\n");
       continue;

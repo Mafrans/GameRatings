@@ -1,6 +1,9 @@
 import { FastifyReply } from "fastify";
 import { GetGamesRequest } from "../../types/GetGamesRequest";
-import { Game, getGames, getGamesSortedByTitle } from "../../models/Game";
+import {
+  getGamesSortedByTitleAscending,
+  getGamesSortedByTitleDescending,
+} from "../../models/Game";
 
 export async function getGamesRoute(
   request: GetGamesRequest,
@@ -8,8 +11,13 @@ export async function getGamesRoute(
 ) {
   const { count = 20, skip = 0, dir = "asc" } = request.query;
 
-  return await getGamesSortedByTitle(dir, {
-    "@limit": count,
-    "@offset": skip,
-  });
+  switch (dir) {
+    case "asc":
+      return getGamesSortedByTitleAscending.all({ limit: count, offset: skip });
+    case "desc":
+      return getGamesSortedByTitleDescending.all({
+        limit: count,
+        offset: skip,
+      });
+  }
 }

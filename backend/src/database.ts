@@ -1,7 +1,6 @@
-import { open } from "sqlite";
-import sqlite3 from "sqlite3";
+import Database from "better-sqlite3";
+import { CustomDatabase } from "./types/CustomDatabase";
 
-export const db = await open({
-  filename: "database.sql",
-  driver: sqlite3.Database,
-});
+export const db = new Database("database.sql", {
+  verbose: console.log,
+}) as CustomDatabase;

@@ -1,5 +1,4 @@
 import { db } from "../database";
-import type { DBResult } from "../types/DBResult";
 
 export type Game = {
   title: string;
@@ -7,68 +6,65 @@ export type Game = {
 };
 
 db.exec(`--sql
-  create table if not exists Games(
+  create table if not exists games(
+    id      integer primary key,
     title   text,
-    slug    text unique,
+    slug    text unique
   )
 `);
 
-const getGamesStmt = await db.prepare(`--sql
-  select * from Games limit @limit offset @offset
-`);
+type GetGamesParams = { limit: number; offset: number };
 
-const getGameByIdStmt = await db.prepare(`--sql
-  select * from Games where rowid = @id limit 1
-`);
+type GetGameByIdParams = { id: number };
 
-const getGameBySlugStmt = await db.prepare(`--sql
-  select * from Games where slug = @slug limit 1
-`);
+type GetGameBySlugParams = { slug: string };
 
-const searchGamesByTitleStmt = await db.prepare(`--sql
-  select * from Games where title like '%@title%' limit @limit offset @offset
-`);
-
-const getGamesSortedByTitleAscendingStmt = await db.prepare(`--sql
-  select * from Games order by title ASC limit @limit offset @offset
-`);
-const getGamesSortedByTitleDescendingStmt = await db.prepare(`--sql
-  select * from Games order by title DESC limit @limit offset @offset
-`);
-
-const createGameStmt = await db.prepare(`--sql
-  insert into Games(title, slug, rating) values (@title, @slug, @rating)
-`);
-
-export const getGames = (params: { "@limit": number; "@offset": number }) =>
-  getGamesStmt.all<DBResult<Game[]>>(params);
-
-export const getGameById = (params: { "@id": number }) =>
-  getGameByIdStmt.get<DBResult<Game>>(params);
-
-export const getGameBySlug = (params: { "@slug": number }) =>
-  getGameBySlugStmt.get<DBResult<Game>>(params);
-
-export const searchGamesByTitle = (params: {
-  "@title": string;
-  "@limit": number;
-  "@offset": number;
-}) => searchGamesByTitleStmt.all<DBResult<Game[]>>(params);
-
-export const getGamesSortedByTitle = (
-  direction: "asc" | "desc",
-  params: {
-    "@limit": number;
-    "@offset": number;
-  }
-) => {
-  switch (direction) {
-    case "asc":
-      return getGamesSortedByTitleAscendingStmt.all<DBResult<Game[]>>(params);
-    case "desc":
-      return getGamesSortedByTitleDescendingStmt.all<DBResult<Game[]>>(params);
-  }
+type SearchGamesByTitleParams = {
+  title: string;
+  limit: number;
+  offset: number;
 };
 
-export const createGame = (params: { "@title": string; "@slug": string }) =>
-  createGameStmt.run(params);
+type GetGamesSortedByTitleParams = {
+  limit: number;
+  offset: number;
+};
+
+type CreateGameParams = { title: string; slug: string };
+
+export const getGames = db.prepare<GetGamesParams, Game>(`--sql
+  select * from games limit @limit offset @offset
+`);
+
+export const getGameById = db.prepare<GetGameByIdParams, Game>(`--sql
+  select * from games where rowid = @id limit 1
+`);
+
+export const getGameBySlug = db.prepare<GetGameBySlugParams, Game>(`--sql
+  select * from games where slug = @slug limit 1
+`);
+
+export const searchGamesByTitle = db.prepare<
+  SearchGamesByTitleParams,
+  Game
+>(`--sql
+  select * from games where title like '%@title%' limit @limit offset @offset
+`);
+
+export const getGamesSortedByTitleAscending = db.prepare<
+  GetGamesSortedByTitleParams,
+  Game
+>(`--sql
+  select * from games order by title ASC limit @limit offset @offset
+`);
+
+export const getGamesSortedByTitleDescending = db.prepare<
+  GetGamesSortedByTitleParams,
+  Game
+>(`--sql
+  select * from games order by title DESC limit @limit offset @offset
+`);
+
+export const createGame = db.prepare<CreateGameParams, Game>(`--sql
+  insert into games(title, slug) values (@title, @slug)
+`);
