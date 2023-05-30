@@ -4,14 +4,12 @@ import type { DBResult } from "../types/DBResult";
 export type Game = {
   title: string;
   slug: string;
-  rating: number;
 };
 
 db.exec(`--sql
   create table if not exists Games(
     title   text,
     slug    text unique,
-    rating  real
   )
 `);
 
@@ -36,14 +34,6 @@ const getGamesSortedByTitleAscendingStmt = await db.prepare(`--sql
 `);
 const getGamesSortedByTitleDescendingStmt = await db.prepare(`--sql
   select * from Games order by title DESC limit @limit offset @offset
-`);
-
-const getGamesSortedByRatingAscendingStmt = await db.prepare(`--sql
-  select * from Games order by rating ASC limit @limit offset @offset
-`);
-
-const getGamesSortedByRatingDescendingStmt = await db.prepare(`--sql
-  select * from Games order by rating DESC limit @limit offset @offset
 `);
 
 const createGameStmt = await db.prepare(`--sql
@@ -80,23 +70,5 @@ export const getGamesSortedByTitle = (
   }
 };
 
-export const getGamesSortedByRating = (
-  direction: "asc" | "desc",
-  params: {
-    "@limit": number;
-    "@offset": number;
-  }
-) => {
-  switch (direction) {
-    case "asc":
-      return getGamesSortedByRatingAscendingStmt.all<DBResult<Game[]>>(params);
-    case "desc":
-      return getGamesSortedByRatingDescendingStmt.all<DBResult<Game[]>>(params);
-  }
-};
-
-export const createGame = (params: {
-  "@title": string;
-  "@slug": string;
-  "@rating": number;
-}) => createGameStmt.run(params);
+export const createGame = (params: { "@title": string; "@slug": string }) =>
+  createGameStmt.run(params);

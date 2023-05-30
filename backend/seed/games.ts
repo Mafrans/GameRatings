@@ -4,22 +4,18 @@ const games: Game[] = [
   {
     title: "Hotline Miami",
     slug: "hotline-miami",
-    rating: 9,
   },
   {
     title: "Streets of Rage 2",
     slug: "streets-of-rage-2",
-    rating: 8.5,
   },
   {
     title: "Dishonored",
     slug: "dishonored",
-    rating: 10,
   },
   {
     title: "Deus Ex",
     slug: "deus-ex",
-    rating: 8,
   },
 ];
 
@@ -32,7 +28,6 @@ export async function seedGames() {
       await createGame({
         "@title": game.title,
         "@slug": game.slug,
-        "@rating": game.rating,
       });
     } catch (err) {
       process.stdout.write(" ERROR\n");
