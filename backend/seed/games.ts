@@ -23,7 +23,7 @@ export async function seedGames() {
   console.log("Seeding games");
 
   for (const game of games) {
-    process.stdout.write(game.title);
+    process.stdout.write(`${game.title}...`);
     try {
       createGame.run(game);
     } catch (err) {

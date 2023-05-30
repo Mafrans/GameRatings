@@ -21,11 +21,11 @@ const ratingSeeds = [
 ];
 
 export async function seedRatings() {
-  console.log("Seeding games");
+  console.log("Seeding ratings");
 
   for (const rating of ratingSeeds) {
     const game = getGameBySlug.get({ slug: rating.slug });
-    process.stdout.write(`Rating for ${game.title} - ${rating.score} / 10`);
+    process.stdout.write(`${game.title} (${rating.score} / 10)...`);
     try {
       createRating.run({
         gameId: game.id,
