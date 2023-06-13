@@ -7,6 +7,8 @@ import GetGameBySlugSchema from "../schemas/GetGameBySlugSchema";
 import { getGameBySlugRoute } from "./games/getGameBySlugRoute";
 import RegisterUserSchema from "../schemas/RegisterUserSchema";
 import { registerUserRoute } from "./users/registerUserRoute";
+import LoginSchema from "../schemas/LoginSchema";
+import { loginRoute } from "./users/loginRoute";
 
 const router: FastifyPluginAsync = async (fastify: FastifyInstance) => {
   fastify.get("/games", {
@@ -22,6 +24,11 @@ const router: FastifyPluginAsync = async (fastify: FastifyInstance) => {
   fastify.get("/ratings", {
     schema: GetRatingsSchema,
     handler: getRatingsRoute,
+  });
+
+  fastify.post("/login", {
+    schema: LoginSchema,
+    handler: loginRoute,
   });
 
   fastify.post("/register", {

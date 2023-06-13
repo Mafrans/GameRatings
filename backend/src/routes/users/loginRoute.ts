@@ -1,47 +1,35 @@
 import { FastifyReply } from "fastify";
-import { getUserByUsername, getUserByEmail } from "../../models/User";
+import crypto from "crypto";
+import bcrypt from "bcrypt";
+import dayjs from "dayjs";
+import { getUserByUsername, getUserByEmail, User } from "../../models/User";
 import { LoginRequest } from "../../types/LoginRequest";
+import {
+  createSession,
+  generateToken,
+  getExpirationDate as generateSQLiteExpirationDate,
+} from "../../models/Session";
+import { DBRow } from "../../types/DBRow";
 
 export async function loginRoute(request: LoginRequest, reply: FastifyReply) {
-  if ("email" in request.body) {
-    return loginWithEmail(request, reply);
-  } else if ("username" in request.body) {
-    return loginWithUsername(request, reply);
-  }
-}
+  const { body } = request;
 
-function loginWithEmail(request: LoginRequest, reply: FastifyReply) {
-  if (!("email" in request.body)) {
-    reply.statusCode = 400;
-    throw new Error(
-      "'body.email' is required when logging in with an email address."
-    );
+  let user: DBRow<User>;
+  if ("email" in body) {
+    user = getUserByEmail.get(body);
+  } else if ("username" in body) {
+    user = getUserByUsername.get(body);
   }
 
-  const { email, password } = request.body;
-  const user = getUserByEmail.get({ email });
-  if (user == null) {
+  const authorized = await bcrypt.compare(body.password, user?.password);
+  if (user == null || !authorized) {
     reply.statusCode = 401;
     throw new Error("Username or password is invalid.");
   }
 
-  // TODO: create user session
-}
-
-function loginWithUsername(request: LoginRequest, reply: FastifyReply) {
-  if (!("username" in request.body)) {
-    reply.statusCode = 400;
-    throw new Error(
-      "'body.email' is required when logging in with an email address."
-    );
-  }
-
-  const { username, password } = request.body;
-  const user = getUserByUsername.get({ username });
-  if (user == null) {
-    reply.statusCode = 401;
-    throw new Error("Username or password is invalid.");
-  }
-
-  // TODO: create user session
+  return createSession.get({
+    token: generateToken(),
+    expiresAt: generateSQLiteExpirationDate(),
+    userId: user.id,
+  });
 }

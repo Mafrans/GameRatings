@@ -18,8 +18,20 @@ const body = T.Union([
   }),
 ]);
 
+const response = {
+  "2xx": T.Object({
+    token: T.String({
+      pattern: "[a-f0-9]+",
+    }),
+  }),
+  "401": T.Object({
+    error: T.String(),
+  }),
+};
+
 export const LoginSchema: FastifySchema = {
   body,
+  response,
 };
 
 export default LoginSchema;

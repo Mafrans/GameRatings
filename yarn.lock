@@ -988,6 +988,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dayjs@npm:^1.11.8":
+  version: 1.11.8
+  resolution: "dayjs@npm:1.11.8"
+  checksum: 4fe04b6df98ba6e5f89b49d80bba603cbf01e21a1b4a24ecb163c94c0ba5324a32ac234a139cee654f89d5277a2bcebca5347e6676c28a0a6d1a90f1d34a42b8
+  languageName: node
+  linkType: hard
+
 "debug@npm:4, debug@npm:^4.0.0, debug@npm:^4.1.0, debug@npm:^4.3.3, debug@npm:^4.3.4":
   version: 4.3.4
   resolution: "debug@npm:4.3.4"
@@ -1471,6 +1478,7 @@ __metadata:
     "@types/node": ^20.2.3
     bcrypt: ^5.1.0
     better-sqlite3: ^8.4.0
+    dayjs: ^1.11.8
     dotenv: ^16.1.4
     esbuild: ^0.17.18
     fastify: ^4.17.0

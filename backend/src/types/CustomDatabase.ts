@@ -7,7 +7,7 @@ import { DBRow } from "./DBRow";
 
 interface CustomStatement<T extends unknown[], K = unknown> extends Statement {
   run(...params: T): RunResult;
-  get(...params: T): DBRow<K>;
+  get(...params: T): DBRow<K> | undefined;
   all(...params: T): DBRow<K>[];
 }
 
