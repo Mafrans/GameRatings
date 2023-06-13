@@ -7,14 +7,11 @@ export async function getGameBySlugRoute(
   reply: FastifyReply
 ) {
   const { slug } = request.params;
-  console.log(getGames.all({ limit: 10, offset: 0 }));
-  const game = getGameBySlug.all({ slug });
+  const game = getGameBySlug.get({ slug });
 
   if (game == null) {
     reply.statusCode = 404;
-    return {
-      error: "No such game",
-    };
+    throw new Error("No game exists with that slug");
   }
 
   return game;
