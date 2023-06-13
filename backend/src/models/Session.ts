@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import { db } from "../database";
 import crypto from "crypto";
+import { FastifyRequest } from "fastify";
 
 export type Session = {
   userId: number;
@@ -57,4 +58,16 @@ export const deleteSession = db.prepare<DeleteSessionParams, void>(`--sql
 
 export function checkSessionExpired(session: Session) {
   return dayjs().isAfter(session.expiresAt);
+}
+
+export function getRequestSession(request: FastifyRequest) {
+  const AuthorizationHeader = request.headers.authorization;
+  const TokenCookie = request.cookies.token;
+
+  let token = TokenCookie;
+  if (AuthorizationHeader) {
+    token = AuthorizationHeader.replace("Bearer ", "");
+  }
+
+  return getSessionByToken.get({ token });
 }

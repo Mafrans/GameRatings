@@ -6,6 +6,7 @@ import {
   getUserByEmail,
   hashPassword,
 } from "../../models/User";
+import { Role } from "../../types/Role";
 
 export async function registerUserRoute(
   request: RegisterUserRequest,
@@ -27,6 +28,7 @@ export async function registerUserRoute(
     email,
     username,
     password: await hashPassword(password),
+    role: Role.User,
   });
 }
 

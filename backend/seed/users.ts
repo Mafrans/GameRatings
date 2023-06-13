@@ -1,11 +1,19 @@
 import { getGameBySlug } from "../src/models/Game";
 import { User, createUser, hashPassword } from "../src/models/User";
+import { Role } from "../src/types/Role";
 
 const userSeeds = [
   {
     email: "malte.kluft@gmail.com",
     username: "mafrans",
     password: "password",
+    role: Role.Admin,
+  },
+  {
+    email: "test@mail.com",
+    username: "test_user",
+    password: "password",
+    role: Role.User,
   },
 ];
 

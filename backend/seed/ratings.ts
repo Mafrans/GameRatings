@@ -25,6 +25,8 @@ export async function seedRatings() {
 
   for (const rating of ratingSeeds) {
     const game = getGameBySlug.get({ slug: rating.slug });
+    if (game == null) continue;
+
     process.stdout.write(`${game.title} (${rating.score} / 10)...`);
     try {
       createRating.run({

@@ -32,7 +32,7 @@ export async function loginRoute(request: LoginRequest, reply: FastifyReply) {
     userId: user.id,
   });
 
-  reply.setCookie("token", token, { signed: true });
+  reply.setCookie("token", token);
 
   return { token };
 }

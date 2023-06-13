@@ -1,4 +1,9 @@
-import { FastifyInstance, FastifyPluginAsync } from "fastify";
+import {
+  FastifyInstance,
+  FastifyPluginAsync,
+  FastifyPluginCallback,
+  FastifyReply,
+} from "fastify";
 import { getGamesRoute } from "./games/getGamesRoute";
 import GetGamesSchema from "../schemas/GetGamesSchema";
 import GetRatingsSchema from "../schemas/GetRatingsSchema";
@@ -9,8 +14,16 @@ import RegisterUserSchema from "../schemas/RegisterUserSchema";
 import { registerUserRoute } from "./users/registerUserRoute";
 import LoginSchema from "../schemas/LoginSchema";
 import { loginRoute } from "./users/loginRoute";
+import { assertRoles } from "../middleware/assertRoles";
+import { Role } from "../types/Role";
+import MeSchema from "../schemas/MeSchema";
+import { meRoute } from "./users/meRoute";
 
-const router: FastifyPluginAsync = async (fastify: FastifyInstance) => {
+const router: FastifyPluginCallback = (
+  fastify: FastifyInstance,
+  reply: FastifyReply,
+  done
+) => {
   fastify.get("/games", {
     schema: GetGamesSchema,
     handler: getGamesRoute,
@@ -26,15 +39,23 @@ const router: FastifyPluginAsync = async (fastify: FastifyInstance) => {
     handler: getRatingsRoute,
   });
 
-  fastify.post("/login", {
+  fastify.post("/users/login", {
     schema: LoginSchema,
     handler: loginRoute,
   });
 
-  fastify.post("/register", {
+  fastify.post("/users/register", {
     schema: RegisterUserSchema,
     handler: registerUserRoute,
   });
+
+  fastify.get("/users/me", {
+    schema: MeSchema,
+    handler: meRoute,
+    preHandler: assertRoles([Role.User, Role.Admin]),
+  });
+
+  done();
 };
 
 export default router;

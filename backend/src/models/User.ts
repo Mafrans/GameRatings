@@ -1,10 +1,12 @@
 import { db } from "../database";
 import bcrypt from "bcrypt";
+import { Role } from "../types/Role";
 
 export type User = {
   email: string;
   username: string;
   password: string;
+  role: string;
 };
 
 db.exec(`--sql
@@ -12,6 +14,7 @@ db.exec(`--sql
     id          integer primary key,
     email       text unique not null,
     username    text unique not null,
+    role        text default "${Role.User}",
     password    text not null
   )
 `);
@@ -20,6 +23,11 @@ type CreateUserParams = {
   email: string;
   username: string;
   password: string;
+  role: Role;
+};
+
+type GetUserByIdParams = {
+  id: number;
 };
 
 type GetUserByEmailParams = {
@@ -31,7 +39,11 @@ type GetUserByUsernameParams = {
 };
 
 export const createUser = db.prepare<CreateUserParams, void>(`--sql
-  insert into users(email, username, password) values (@email, @username, @password)
+  insert into users(email, username, password, role) values (@email, @username, @password, @role)
+`);
+
+export const getUserById = db.prepare<GetUserByIdParams, User>(`--sql
+  select * from users where id = @id limit 1;
 `);
 
 export const getUserByEmail = db.prepare<GetUserByEmailParams, User>(`--sql
@@ -45,5 +57,6 @@ export const getUserByUsername = db.prepare<
   select * from users where username = @username limit 1;
 `);
 
-export const hashPassword = (password: string): Promise<string> =>
-  bcrypt.hash(password, +process.env.PASSWORD_ROUNDS);
+export function hashPassword(password: string): Promise<string> {
+  return bcrypt.hash(password, +process.env.PASSWORD_ROUNDS);
+}
