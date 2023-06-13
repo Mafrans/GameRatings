@@ -36,7 +36,10 @@ export const getSessionByToken = db.prepare<
   select * from sessions where token = @token limit 1
 `);
 
-export const createSession = db.prepare<CreateSessionParams, string>(`--sql
+export const createSession = db.prepare<
+  CreateSessionParams,
+  Pick<Session, "token">
+>(`--sql
   insert into sessions(userId, token, expiresAt) values (@userId, @token, @expiresAt) returning token
 `);
 

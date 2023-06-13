@@ -27,9 +27,13 @@ export async function loginRoute(request: LoginRequest, reply: FastifyReply) {
     throw new Error("Username or password is invalid.");
   }
 
-  return createSession.get({
+  const { token } = createSession.get({
     token: generateToken(),
     expiresAt: generateSQLiteExpirationDate(),
     userId: user.id,
   });
+
+  reply.setCookie("token", token, { signed: true });
+
+  return { token };
 }
