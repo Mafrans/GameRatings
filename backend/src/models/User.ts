@@ -1,4 +1,5 @@
 import { db } from "../database";
+import bcrypt from "bcrypt";
 
 export type User = {
   email: string;
@@ -43,3 +44,6 @@ export const getUserByUsername = db.prepare<
 >(`--sql
   select * from users where username = @username limit 1;
 `);
+
+export const hashPassword = (password: string): Promise<string> =>
+  bcrypt.hash(password, +process.env.PASSWORD_ROUNDS);
