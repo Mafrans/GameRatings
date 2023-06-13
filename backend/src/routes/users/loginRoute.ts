@@ -4,12 +4,9 @@ import bcrypt from "bcrypt";
 import dayjs from "dayjs";
 import { getUserByUsername, getUserByEmail, User } from "../../models/User";
 import { LoginRequest } from "../../types/LoginRequest";
-import {
-  createSession,
-  generateToken,
-  getExpirationDate as generateSQLiteExpirationDate,
-} from "../../models/Session";
+import { createSession, clearExpiredSessions } from "../../models/Session";
 import { DBRow } from "../../types/DBRow";
+import { sqliteDateTimeFormat } from "../../util/date";
 
 export async function loginRoute(request: LoginRequest, reply: FastifyReply) {
   const { body } = request;
@@ -27,9 +24,11 @@ export async function loginRoute(request: LoginRequest, reply: FastifyReply) {
     throw new Error("Username or password is invalid.");
   }
 
+  clearExpiredSessions.run();
+
   const { token } = createSession.get({
-    token: generateToken(),
-    expiresAt: generateSQLiteExpirationDate(),
+    token: crypto.randomBytes(32).toString("hex"),
+    expiresAt: dayjs().add(24, "h").format(sqliteDateTimeFormat),
     userId: user.id,
   });
 

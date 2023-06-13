@@ -29,6 +29,10 @@ type CreateSessionParams = {
   expiresAt: string;
 };
 
+type DeleteSessionParams = {
+  token: string;
+};
+
 export const getSessionByToken = db.prepare<
   GetSessionByTokenParams,
   Session
@@ -43,10 +47,14 @@ export const createSession = db.prepare<
   insert into sessions(userId, token, expiresAt) values (@userId, @token, @expiresAt) returning token
 `);
 
-export function generateToken(): string {
-  return crypto.randomBytes(32).toString("hex");
-}
+export const clearExpiredSessions = db.prepare(`--sql
+  delete from sessions where expiresAt < CURRENT_TIMESTAMP
+`);
 
-export function getExpirationDate(): string {
-  return dayjs().add(24, "h").format("YYYY-MM-DD HH:mm:ss");
+export const deleteSession = db.prepare<DeleteSessionParams, void>(`--sql
+  delete from sessions where token = @token
+`);
+
+export function checkSessionExpired(session: Session) {
+  return dayjs().isAfter(session.expiresAt);
 }
